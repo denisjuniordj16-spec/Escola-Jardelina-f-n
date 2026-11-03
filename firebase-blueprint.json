@@ -1,0 +1,159 @@
+{
+  "entities": {
+    "Usuario": {
+      "title": "Usuario",
+      "description": "Perfil de usuário do sistema para controle de acesso por função (portaria ou direção)",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "E-mail de autenticação do usuário"
+        },
+        "nome": {
+          "type": "string",
+          "description": "Nome completo do usuário"
+        },
+        "perfil": {
+          "type": "string",
+          "enum": ["portaria", "direção"],
+          "description": "Perfil de acesso: 'portaria' para porteiro/vigia, 'direção' para monitoramento e gestão"
+        },
+        "ativo": {
+          "type": "boolean",
+          "description": "Indica se a conta está ativa no sistema"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data e hora de criação do perfil"
+        }
+      },
+      "required": ["email", "nome", "perfil", "ativo"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Colaborador ou funcionário da escola cadastrado no sistema",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "department": { "type": "string" },
+        "badgeNumber": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "expectedStartTime": { "type": "string" },
+        "expectedEndTime": { "type": "string" },
+        "toleranceMinutes": { "type": "number" },
+        "active": { "type": "boolean" },
+        "phone": { "type": "string" },
+        "totalDaysOff": { "type": "number" },
+        "usedDaysOff": { "type": "number" },
+        "isOnDayOffToday": { "type": "boolean" },
+        "daysOffPattern": { "type": "array" },
+        "shiftSchedule": { "type": "string" }
+      },
+      "required": ["id", "name", "role", "department", "badgeNumber", "totalDaysOff", "usedDaysOff"]
+    },
+    "TimeRecord": {
+      "title": "TimeRecord",
+      "description": "Registro de batida de ponto de entrada ou saída na portaria",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "employeeId": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "employeeRole": { "type": "string" },
+        "department": { "type": "string" },
+        "badgeNumber": { "type": "string" },
+        "type": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "dateFormatted": { "type": "string" },
+        "timeFormatted": { "type": "string" },
+        "expectedTime": { "type": "string" },
+        "expectedEndTime": { "type": "string" },
+        "punctuality": { "type": "string" },
+        "diffMinutes": { "type": "number" },
+        "registeredBy": { "type": "string" },
+        "gate": { "type": "string" },
+        "notes": { "type": "string" },
+        "delayReason": { "type": "string" }
+      },
+      "required": ["id", "employeeId", "employeeName", "badgeNumber", "timestamp", "punctuality"]
+    },
+    "DayOffRecord": {
+      "title": "DayOffRecord",
+      "description": "Registro de folga lançada ou concedida a um funcionário",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "employeeId": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "department": { "type": "string" },
+        "badgeNumber": { "type": "string" },
+        "date": { "type": "string" },
+        "dateFormatted": { "type": "string" },
+        "reason": { "type": "string" },
+        "registeredAt": { "type": "string" },
+        "registeredBy": { "type": "string" },
+        "remainingAfter": { "type": "number" }
+      },
+      "required": ["id", "employeeId", "date", "reason"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Avisos e comunicados entre a Direção e a Portaria",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "priority": { "type": "string" },
+        "author": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "title", "content"]
+    },
+    "CompanySettings": {
+      "title": "CompanySettings",
+      "description": "Configurações institucionais da escola e emblema",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "emblemType": { "type": "string" },
+        "emblemPresetId": { "type": "string" },
+        "emblemUrl": { "type": "string" },
+        "primaryColor": { "type": "string" }
+      },
+      "required": ["name"]
+    }
+  },
+  "firestore": {
+    "/usuarios/{userId}": {
+      "schema": "Usuario",
+      "description": "Perfis de usuários para validação de acesso da portaria e direção"
+    },
+    "/employees/{employeeId}": {
+      "schema": "Employee",
+      "description": "Colaboradores e funcionários da escola com escalas e saldos de folga"
+    },
+    "/time_records/{recordId}": {
+      "schema": "TimeRecord",
+      "description": "Registros de ponto batidos em tempo real na portaria"
+    },
+    "/day_off_records/{recordId}": {
+      "schema": "DayOffRecord",
+      "description": "Histórico de folgas concedidas"
+    },
+    "/announcements/{announcementId}": {
+      "schema": "Announcement",
+      "description": "Comunicados emitidos pela direção para a portaria"
+    },
+    "/company_settings/{settingId}": {
+      "schema": "CompanySettings",
+      "description": "Identidade visual da escola e configurações"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // School application users & profiles
+    match /usuarios/{userId} {
+      allow read, write: if true;
+    }
+
+    // School employees and folgas schedule
+    match /employees/{employeeId} {
+      allow read, write: if true;
+    }
+
+    // Real-time time attendance records (Portaria & Direção)
+    match /time_records/{recordId} {
+      allow read, write: if true;
+    }
+
+    // Days off records history
+    match /day_off_records/{recordId} {
+      allow read, write: if true;
+    }
+
+    // Announcements and gate memos
+    match /announcements/{announcementId} {
+      allow read, write: if true;
+    }
+
+    // Company / School settings and emblems
+    match /company_settings/{settingId} {
+      allow read, write: if true;
+    }
+
+    // Fallback safe rule
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
